@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class Comment extends Equatable {
-  final String id; // Unique ID for the comment
-  final String articleId; // ID of the article this comment belongs to
+  final String id;
+  final String articleId;
   final String userName;
   final String text;
   final DateTime createdAt;
@@ -17,4 +17,4 @@ class Comment extends Equatable {
 
   @override
   List<Object?> get props => [id, articleId, userName, text, createdAt];
-} 
+}

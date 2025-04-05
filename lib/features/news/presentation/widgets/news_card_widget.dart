@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/news_article.dart';
+import 'package:newsss/features/news/domain/entities/news_article.dart';
 
 class NewsCardWidget extends StatelessWidget {
   final NewsArticle article;
@@ -28,7 +28,10 @@ class NewsCardWidget extends StatelessWidget {
               // Title
               Text(
                 article.title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -43,11 +46,11 @@ class NewsCardWidget extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
 
-              // Comments Button/Indicator
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
-                  icon: Icon(Icons.comment_outlined, size: 18, color: Colors.grey[700]),
+                  icon: Icon(Icons.comment_outlined,
+                      size: 18, color: Colors.grey[700]),
                   label: Text(
                     article.comments.length.toString(),
                     style: TextStyle(color: Colors.grey[700]),
@@ -55,7 +58,7 @@ class NewsCardWidget extends StatelessWidget {
                   onPressed: onTapComments,
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
-                    minimumSize: const Size(40, 30), // Smaller tap target
+                    minimumSize: const Size(40, 30),
                     alignment: Alignment.centerRight,
                   ),
                 ),
@@ -66,4 +69,4 @@ class NewsCardWidget extends StatelessWidget {
       ),
     );
   }
-} 
+}

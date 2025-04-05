@@ -1,16 +1,6 @@
 import 'dart:convert';
 
-// Helper function to safely parse DateTime
-DateTime? _parseDateTime(String? dateString) {
-  if (dateString == null) return null;
-  try {
-    return DateTime.parse(dateString);
-  } catch (e) {
-    // Handle potential parsing errors, return null or default
-    print('Error parsing date: $dateString, Error: $e');
-    return null;
-  }
-}
+import 'package:flutter/foundation.dart';
 
 class NewsApiResponse {
   final String status;
@@ -28,18 +18,21 @@ class NewsApiResponse {
       status: json['status'] ?? 'error',
       totalResults: json['totalResults'] ?? 0,
       articles: (json['articles'] as List<dynamic>? ?? [])
-          .map((articleJson) => ArticleApiModel.fromJson(articleJson as Map<String, dynamic>))
+          .map((articleJson) =>
+              ArticleApiModel.fromJson(articleJson as Map<String, dynamic>))
           .toList(),
     );
   }
 
-  // Optional: Helper to decode directly from JSON string
   factory NewsApiResponse.fromJsonString(String jsonString) {
-     try {
+    try {
       return NewsApiResponse.fromJson(json.decode(jsonString));
     } catch (e) {
-      print('Error decoding NewsApiResponse JSON: $e');
-      // Return an empty/error response or rethrow
+      if (kDebugMode) {
+        if (kDebugMode) {
+          print('Error decoding NewsApiResponse JSON: $e');
+        }
+      }
       return NewsApiResponse(status: 'error', totalResults: 0, articles: []);
     }
   }
@@ -52,7 +45,7 @@ class ArticleApiModel {
   final String? description;
   final String? url;
   final String? urlToImage;
-  final String? publishedAt; // Keep as String for now, parse later
+  final String? publishedAt;
   final String? content;
 
   ArticleApiModel({
@@ -68,13 +61,16 @@ class ArticleApiModel {
 
   factory ArticleApiModel.fromJson(Map<String, dynamic> json) {
     return ArticleApiModel(
-      source: json['source'] != null ? SourceApiModel.fromJson(json['source']) : null,
+      source: json['source'] != null
+          ? SourceApiModel.fromJson(json['source'])
+          : null,
       author: json['author'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
       url: json['url'] as String?,
       urlToImage: json['urlToImage'] as String?,
-      publishedAt: json['publishedAt'] as String?, // Keep as String
+      publishedAt: json['publishedAt'] as String?,
+      // Keep as String
       content: json['content'] as String?, // Often partial in NewsAPI free tier
     );
   }
@@ -92,4 +88,4 @@ class SourceApiModel {
       name: json['name'] as String?,
     );
   }
-} 
+}

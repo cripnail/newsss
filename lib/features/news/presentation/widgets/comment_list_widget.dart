@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/comment.dart';
-import '../bloc/news_bloc.dart'; // To dispatch AddCommentEvent
-import 'comment_widget.dart';
+import 'package:newsss/features/news/domain/entities/comment.dart';
+import 'package:newsss/features/news/presentation/bloc/news_bloc.dart';
+import 'package:newsss/features/news/presentation/widgets/comment_widget.dart';
 
 class CommentListWidget extends StatefulWidget {
-  final String articleUrl; // Needed to add new comments
+  final String articleUrl;
   final List<Comment> comments;
 
   const CommentListWidget({
@@ -31,8 +31,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
   void _addComment() {
     if (_formKey.currentState!.validate()) {
       final text = _commentController.text;
-      // TODO: Get actual username from user state/profile
-      const userName = 'CurrentUser'; 
+      const userName = 'CurrentUser'; // Placeholder
       
       context.read<NewsBloc>().add(AddCommentEvent(
             articleUrl: widget.articleUrl,
@@ -41,7 +40,7 @@ class _CommentListWidgetState extends State<CommentListWidget> {
           ));
       
       _commentController.clear();
-      FocusScope.of(context).unfocus(); // Hide keyboard
+      FocusScope.of(context).unfocus();
     }
   }
 
@@ -57,7 +56,6 @@ class _CommentListWidgetState extends State<CommentListWidget> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        // Input field
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Form(
@@ -92,7 +90,6 @@ class _CommentListWidgetState extends State<CommentListWidget> {
             ),
           ),
         ),
-        // List of comments
         if (widget.comments.isEmpty)
           const Padding(
             padding: EdgeInsets.all(16.0),
@@ -100,8 +97,8 @@ class _CommentListWidgetState extends State<CommentListWidget> {
           )
         else
           ListView.builder(
-            shrinkWrap: true, // Important inside Column/ScrollView
-            physics: const NeverScrollableScrollPhysics(), // List scrolls with the page
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.comments.length,
             itemBuilder: (context, index) {
               return CommentWidget(comment: widget.comments[index]);

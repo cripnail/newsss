@@ -3,6 +3,5 @@ class AppRoutes {
   static const String newsList = '/news';
   static const String newsDetail = '/news/detail';
 
-  // Prevent instantiation
-  AppRoutes._(); 
-} 
+  AppRoutes._();
+}

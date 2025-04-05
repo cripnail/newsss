@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'comment.dart';
 
 class NewsArticle extends Equatable {
-  final String id; // Use a unique ID for DB lookup, could be URL or generated
+  final String id;
   final String? sourceName;
   final String? author;
   final String title;
@@ -10,8 +10,8 @@ class NewsArticle extends Equatable {
   final String url;
   final String? urlToImage;
   final DateTime? publishedAt;
-  final String content; // Full content
-  final List<Comment> comments; // Comments associated with this article
+  final String content;
+  final List<Comment> comments;
 
   const NewsArticle({
     required this.id,
@@ -23,7 +23,7 @@ class NewsArticle extends Equatable {
     this.urlToImage,
     this.publishedAt,
     required this.content,
-    this.comments = const [], // Default to empty list
+    this.comments = const [],
   });
 
   @override
@@ -39,4 +39,4 @@ class NewsArticle extends Equatable {
         content,
         comments,
       ];
-} 
+}

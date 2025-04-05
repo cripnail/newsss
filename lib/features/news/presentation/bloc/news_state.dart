@@ -1,21 +1,18 @@
-part of 'news_bloc.dart'; // Link to the BLoC file
+part of 'news_bloc.dart';
 
 enum NewsStatus { initial, loading, loaded, searching, error }
 
 class NewsState extends Equatable {
   final NewsStatus status;
-  final List<NewsArticle> articles; // Current list of articles (either all or search results)
-  final bool hasReachedMax; // For pagination later, maybe
+  final List<NewsArticle> articles;
+  final bool hasReachedMax;
   final String? errorMessage;
-  // Keep track of comments for the currently viewed article
-  // Map<articleId, List<Comment>> commentsByArticle; // Or load them on demand
 
   const NewsState({
     this.status = NewsStatus.initial,
     this.articles = const <NewsArticle>[],
     this.hasReachedMax = false,
     this.errorMessage,
-    // this.commentsByArticle = const {},
   });
 
   NewsState copyWith({
@@ -23,16 +20,14 @@ class NewsState extends Equatable {
     List<NewsArticle>? articles,
     bool? hasReachedMax,
     String? errorMessage,
-    // Map<articleId, List<Comment>>? commentsByArticle,
   }) {
     return NewsState(
-      // If status is explicitly set to error, clear the message unless a new one is provided
       status: status ?? this.status,
       articles: articles ?? this.articles,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      // Clear error message if status is not error, unless a new message is provided
-      errorMessage: (status != NewsStatus.error && errorMessage == null) ? null : errorMessage ?? this.errorMessage,
-      // commentsByArticle: commentsByArticle ?? this.commentsByArticle,
+      errorMessage: (status != NewsStatus.error && errorMessage == null)
+          ? null
+          : errorMessage ?? this.errorMessage,
     );
   }
 
@@ -42,6 +37,5 @@ class NewsState extends Equatable {
         articles,
         hasReachedMax,
         errorMessage,
-        // commentsByArticle,
       ];
-} 
+}

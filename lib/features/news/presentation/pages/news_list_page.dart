@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/di/injector.dart';
-import '../../../../core/router/app_routes.dart';
-import '../../../../core/widgets/error_display.dart';
-import '../../../../core/widgets/loading_indicator.dart';
-import '../../../auth/presentation/cubit/auth_cubit.dart';
-import '../../../auth/presentation/cubit/auth_state.dart';
-import '../../domain/entities/news_article.dart';
-import '../bloc/news_bloc.dart';
-import '../widgets/news_card_widget.dart';
+import 'package:newsss/core/di/injector.dart';
+import 'package:newsss/core/router/app_routes.dart';
+import 'package:newsss/core/widgets/error_display.dart';
+import 'package:newsss/core/widgets/loading_indicator.dart';
+import 'package:newsss/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:newsss/features/auth/presentation/cubit/auth_state.dart';
+import 'package:newsss/features/news/domain/entities/news_article.dart';
+import 'package:newsss/features/news/presentation/bloc/news_bloc.dart';
+import 'package:newsss/features/news/presentation/widgets/news_card_widget.dart';
 
 class NewsListPage extends StatelessWidget {
   const NewsListPage({super.key});
@@ -44,40 +44,34 @@ class NewsListView extends StatefulWidget {
 
 class _NewsListViewState extends State<NewsListView> {
   final _searchController = TextEditingController();
-  // Можно добавить ScrollController для пагинации в будущем
-  // final _scrollController = ScrollController(); 
 
   @override
   void initState() {
     super.initState();
-    // Добавляем listener для отправки события поиска при изменении текста
     _searchController.addListener(_onSearchChanged);
-    // TODO: Add listener for scroll controller for pagination
   }
 
   @override
   void dispose() {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
-    // _scrollController.dispose();
     super.dispose();
   }
 
   void _onSearchChanged() {
-    // Отправляем событие поиска в BLoC
     context.read<NewsBloc>().add(SearchNewsEvent(_searchController.text));
   }
 
-  void _navigateToDetail(BuildContext context, NewsArticle article, {bool scrollToComments = false}) {
-    // Получаем экземпляр NewsBloc из текущего контекста
+  void _navigateToDetail(BuildContext context, NewsArticle article,
+      {bool scrollToComments = false}) {
     final newsBloc = BlocProvider.of<NewsBloc>(context);
     Navigator.of(context).pushNamed(
-        AppRoutes.newsDetail,
-        arguments: {
-           'article': article,
-           'scrollToComments': scrollToComments,
-           'newsBloc': newsBloc, // Передаем экземпляр Bloc
-        },
+      AppRoutes.newsDetail,
+      arguments: {
+        'article': article,
+        'scrollToComments': scrollToComments,
+        'newsBloc': newsBloc,
+      },
     );
   }
 
@@ -117,7 +111,8 @@ class _NewsListViewState extends State<NewsListView> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -125,22 +120,23 @@ class _NewsListViewState extends State<NewsListView> {
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30.0),
-                  borderSide: BorderSide.none, // No border
+                  borderSide: BorderSide.none,
                 ),
                 filled: true,
                 fillColor: Colors.grey[200],
-                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                // Кнопка очистки поля
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                 suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        // Отправляем событие с пустым запросом, чтобы сбросить поиск
-                         context.read<NewsBloc>().add(const SearchNewsEvent(''));
-                      },
-                    )
-                  : null,
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
+                          context
+                              .read<NewsBloc>()
+                              .add(const SearchNewsEvent(''));
+                        },
+                      )
+                    : null,
               ),
             ),
           ),
@@ -151,37 +147,28 @@ class _NewsListViewState extends State<NewsListView> {
           switch (state.status) {
             case NewsStatus.initial:
             case NewsStatus.loading:
-              // Показываем индикатор загрузки только при первой загрузке
               return const LoadingIndicator(message: 'Fetching news...');
-
             case NewsStatus.searching:
-              // Можно показывать другой индикатор во время поиска или оставить старый список
-              // Для мгновенного отклика оставим предыдущий список
-              // Если нужно показывать индикатор поиска, раскомментировать:
-              // return const LoadingIndicator(message: 'Searching...');
-              // Или просто отображаем текущий список, пока идет поиск
               if (state.articles.isEmpty) {
-                  return const Center(child: Text('Searching...'));
-              } else {
-                  // Fallthrough to show the list while searching in background
-              } 
-              // Continue to loaded state rendering
+                return const Center(child: Text('Searching...'));
+              }
               return _buildNewsList(context, state.articles);
-
             case NewsStatus.error:
               return ErrorDisplay(
                 message: state.errorMessage ?? 'Failed to load news.',
-                onRetry: () => context.read<NewsBloc>().add(const GetNewsListEvent(forceRefresh: true)),
+                onRetry: () => context
+                    .read<NewsBloc>()
+                    .add(const GetNewsListEvent(forceRefresh: true)),
               );
-
             case NewsStatus.loaded:
               if (state.articles.isEmpty) {
                 return ErrorDisplay(
                   message: 'No news articles found.',
-                  onRetry: () => context.read<NewsBloc>().add(const GetNewsListEvent(forceRefresh: true)),
+                  onRetry: () => context
+                      .read<NewsBloc>()
+                      .add(const GetNewsListEvent(forceRefresh: true)),
                 );
               }
-              // Отображаем список новостей
               return _buildNewsList(context, state.articles);
           }
         },
@@ -192,24 +179,22 @@ class _NewsListViewState extends State<NewsListView> {
   Widget _buildNewsList(BuildContext context, List<NewsArticle> articles) {
     return RefreshIndicator(
       onRefresh: () async {
-        // Запускаем событие обновления при pull-to-refresh
-        context.read<NewsBloc>().add(const GetNewsListEvent(forceRefresh: true));
-        // Дожидаемся завершения (хотя BLoC сам обновит UI)
-        // Можно использовать BlocListener для ожидания завершения обновления,
-        // но для RefreshIndicator достаточно просто запустить событие.
+        context
+            .read<NewsBloc>()
+            .add(const GetNewsListEvent(forceRefresh: true));
       },
       child: ListView.builder(
-        // controller: _scrollController, // Add for pagination later
         itemCount: articles.length,
         itemBuilder: (context, index) {
           final article = articles[index];
           return NewsCardWidget(
             article: article,
             onTapArticle: () => _navigateToDetail(context, article),
-            onTapComments: () => _navigateToDetail(context, article, scrollToComments: true),
+            onTapComments: () =>
+                _navigateToDetail(context, article, scrollToComments: true),
           );
         },
       ),
     );
   }
-} 
+}

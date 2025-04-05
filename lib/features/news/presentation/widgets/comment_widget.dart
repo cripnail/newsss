@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
-import '../../domain/entities/comment.dart';
+import 'package:newsss/features/news/domain/entities/comment.dart';
 
 class CommentWidget extends StatelessWidget {
   final Comment comment;
