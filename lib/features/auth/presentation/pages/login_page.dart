@@ -94,8 +94,7 @@ class _LoginViewState extends State<LoginView> {
                   ElevatedButton(
                     onPressed: () => _login(context),
                     style: ElevatedButton.styleFrom(
-                      minimumSize:
-                          const Size(double.infinity, 48), // Stretch button
+                      minimumSize: const Size(double.infinity, 48),
                     ),
                     child: const Text('Login'),
                   ),

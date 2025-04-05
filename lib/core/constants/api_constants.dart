@@ -7,7 +7,6 @@ class ApiConstants {
   static const String defaultCountry = 'us';
   static const int defaultPageSize = 20;
 
-  // Endpoints
   static const String topHeadlines = '/top-headlines';
   static const String everything = '/everything';
 

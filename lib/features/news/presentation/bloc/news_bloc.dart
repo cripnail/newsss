@@ -47,7 +47,6 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
     } on DatabaseException catch (e) {
       emit(state.copyWith(status: NewsStatus.error, errorMessage: e.message));
     } on NetworkException catch (e) {
-      // If network fails during refresh, show error but keep old data if available
       emit(state.copyWith(status: NewsStatus.error, errorMessage: e.message));
     } on ServerException catch (e) {
       emit(state.copyWith(status: NewsStatus.error, errorMessage: e.message));
@@ -104,7 +103,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           urlToImage: originalArticle.urlToImage,
           publishedAt: originalArticle.publishedAt,
           content: originalArticle.content,
-          comments: latestComments, // Update comments
+          comments: latestComments,
         );
         emit(state.copyWith(
             articles: updatedArticles, status: NewsStatus.loaded));
@@ -115,12 +114,12 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
       emit(state.copyWith(
           status: NewsStatus.error,
           errorMessage: 'Failed to add comment: ${e.message}'));
-      emit(state.copyWith(status: NewsStatus.loaded)); // Revert to loaded state
+      emit(state.copyWith(status: NewsStatus.loaded));
     } catch (e) {
       emit(state.copyWith(
           status: NewsStatus.error,
           errorMessage: 'Failed to add comment: ${e.toString()}'));
-      emit(state.copyWith(status: NewsStatus.loaded)); // Revert to loaded state
+      emit(state.copyWith(status: NewsStatus.loaded));
     }
   }
 }

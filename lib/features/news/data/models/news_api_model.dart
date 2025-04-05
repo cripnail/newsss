@@ -71,7 +71,7 @@ class ArticleApiModel {
       urlToImage: json['urlToImage'] as String?,
       publishedAt: json['publishedAt'] as String?,
       // Keep as String
-      content: json['content'] as String?, // Often partial in NewsAPI free tier
+      content: json['content'] as String?,
     );
   }
 }

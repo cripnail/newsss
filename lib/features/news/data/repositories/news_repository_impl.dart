@@ -31,8 +31,6 @@ class NewsRepositoryImpl implements NewsRepository {
         final remoteArticles = await remoteDataSource.getTopHeadlines();
         final dbModels = articleApiModelListToDbModelList(remoteArticles);
         await localDataSource.saveArticles(dbModels);
-      } on NetworkException {
-        // Don't rethrow yet, try returning local data first
       } on ServerException catch (e) {
         if (kDebugMode) {
           print(
@@ -46,8 +44,7 @@ class NewsRepositoryImpl implements NewsRepository {
       final List<NewsArticle> articlesWithComments = [];
       for (final dbModel in localArticles) {
         if (dbModel.url != null) {
-          final comments = await getComments(
-              dbModel.url!); // Use existing getComments method
+          final comments = await getComments(dbModel.url!);
           articlesWithComments.add(newsDbModelToEntity(dbModel, comments));
         }
       }

@@ -12,7 +12,8 @@ class NewsDetailPage extends StatefulWidget {
   final NewsArticle article;
   final bool scrollToComments;
 
-  const NewsDetailPage({super.key, required this.article, this.scrollToComments = false});
+  const NewsDetailPage(
+      {super.key, required this.article, this.scrollToComments = false});
 
   @override
   State<NewsDetailPage> createState() => _NewsDetailPageState();
@@ -26,9 +27,9 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
   void initState() {
     super.initState();
     if (widget.scrollToComments) {
-       WidgetsBinding.instance.addPostFrameCallback((_) {
-         Future.delayed(const Duration(milliseconds: 100), _scrollToComments);
-       });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 100), _scrollToComments);
+      });
     }
   }
 
@@ -72,11 +73,12 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
       ),
       body: BlocListener<NewsBloc, NewsState>(
         listener: (context, state) {
-           if (state.status == NewsStatus.error && state.errorMessage?.contains('comment') == true) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(content: Text(state.errorMessage!)));
-           }
+          if (state.status == NewsStatus.error &&
+              state.errorMessage?.contains('comment') == true) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+          }
         },
         child: SingleChildScrollView(
           controller: _scrollController,
@@ -87,12 +89,16 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
               children: [
                 Text(
                   widget.article.title,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8.0),
                 Row(
                   children: [
-                    if (widget.article.author != null && widget.article.author!.isNotEmpty)
+                    if (widget.article.author != null &&
+                        widget.article.author!.isNotEmpty)
                       Expanded(
                         child: Text(
                           'By ${widget.article.author}',
@@ -109,39 +115,45 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                 const SizedBox(height: 16.0),
                 if (widget.article.urlToImage != null)
                   ClipRRect(
-                     borderRadius: BorderRadius.circular(8.0),
-                     child: Image.network(
-                        widget.article.urlToImage!,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const Center(child: LoadingIndicator(message: 'Loading image...'));
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 200,
-                            color: Colors.grey[300],
-                            child: const Center(child: Icon(Icons.broken_image, color: Colors.grey)),
-                          );
-                        },
-                     ),
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      widget.article.urlToImage!,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                            child:
+                                LoadingIndicator(message: 'Loading image...'));
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 200,
+                          color: Colors.grey[300],
+                          child: const Center(
+                              child:
+                                  Icon(Icons.broken_image, color: Colors.grey)),
+                        );
+                      },
+                    ),
                   ),
                 const SizedBox(height: 16.0),
                 Text(
-                  widget.article.content.isNotEmpty 
-                    ? widget.article.content 
-                    : widget.article.description,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.5),
+                  widget.article.content.isNotEmpty
+                      ? widget.article.content
+                      : widget.article.description,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(height: 1.5),
                 ),
-                if (widget.article.url != null) 
-                   Padding(
-                     padding: const EdgeInsets.only(top: 8.0),
-                     child: TextButton(
-                       onPressed: () => _launchUrl(widget.article.url), 
-                       child: const Text('Read full story...'),
-                     ),
-                   ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextButton(
+                    onPressed: () => _launchUrl(widget.article.url),
+                    child: const Text('Read full story...'),
+                  ),
+                ),
                 const SizedBox(height: 24.0),
                 const Divider(),
                 BlocBuilder<NewsBloc, NewsState>(

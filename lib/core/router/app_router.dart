@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Import BlocProvider
-import 'package:shared_preferences/shared_preferences.dart'; // Needed for checking auth state
-import 'package:newsss/core/di/injector.dart'; // Import sl (GetIt instance)
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:newsss/core/di/injector.dart';
 import 'package:newsss/features/auth/presentation/pages/login_page.dart';
 import 'package:newsss/features/news/presentation/pages/news_list_page.dart';
-import 'package:newsss/features/news/domain/entities/news_article.dart'; // Needed for detail arguments
-import 'package:newsss/features/news/presentation/bloc/news_bloc.dart'; // Import NewsBloc
+import 'package:newsss/features/news/domain/entities/news_article.dart';
+import 'package:newsss/features/news/presentation/bloc/news_bloc.dart';
 import 'package:newsss/features/news/presentation/pages/news_detail_page.dart';
-import 'app_routes.dart';
+import 'package:newsss/core/router/app_routes.dart';
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -25,8 +25,7 @@ class AppRouter {
       case AppRoutes.newsList:
         return MaterialPageRoute(builder: (_) => const NewsListPage());
       case AppRoutes.newsDetail:
-        final args =
-            settings.arguments as Map<String, dynamic>?; // Get arguments as Map
+        final args = settings.arguments as Map<String, dynamic>?;
         if (args != null &&
             args['article'] is NewsArticle &&
             args['newsBloc'] is NewsBloc) {

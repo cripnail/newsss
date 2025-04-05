@@ -19,7 +19,7 @@ class IsarService {
           CommentDbModelSchema,
         ],
         directory: directory,
-        inspector: true, // Keep inspector enabled for debugging
+        inspector: true,
       );
     }
     return Future.value(Isar.getInstance());
