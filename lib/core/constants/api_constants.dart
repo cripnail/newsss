@@ -13,5 +13,7 @@ class ApiConstants {
   ApiConstants._();
 
   static bool get isApiKeyAvailable =>
-      newsApiKey.isNotEmpty && newsApiKey != 'YOUR_API_KEY' && newsApiKey != '';
+      newsApiKey.isNotEmpty &&
+      newsApiKey != '21be3053956f4dd5a7c78a2ef00c9510' &&
+      newsApiKey != '';
 }
